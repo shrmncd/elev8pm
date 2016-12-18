@@ -1,0 +1,14 @@
+- CREATE DATABASE -
+** http://dev.mysql.com/doc/mysql-getting-started/en/
+create database elev8pm;
+
+- CREATE USER -
+** http://dev.mysql.com/doc/refman/5.7/en/adding-users.html
+CREATE USER 'lobbyboy'@'localhost' IDENTIFIED BY 'm3ndlZ_b4k3ry';
+
+- ADD USER TO DATABASE -
+use elev8pm;
+GRANT ALL PRIVILEGES ON *.* TO 'lobbyboy'@'localhost' WITH GRANT OPTION;
+
+- CREATE TABLES -
+** use tables in schemas directories
