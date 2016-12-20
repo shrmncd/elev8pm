@@ -6,7 +6,8 @@ class Elev8Requests extends React.Component {
 		super(props);
 
 		this.state = {
-			requests: []
+			requests: [],
+			bells: []
 		};
 
 		this.buildRequests = this.buildRequests.bind(this);
@@ -65,9 +66,7 @@ class Elev8Requests extends React.Component {
 				}, 30000);
 				*/
 				if (data.bell === "ring") {
-					//Radiohead - BciOfJsqh7M
-					//TMNT - bojx9BDpJks
-					document.getElementById('bell').innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/BciOfJsqh7M?autoplay=1"></iframe>';
+					document.getElementById('bell').innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/KOnz2IKJxXk?autoplay=1"></iframe>';
 					document.getElementById('silence-button').style.display = 'block';
 				}
 			});
@@ -77,7 +76,7 @@ class Elev8Requests extends React.Component {
 	componentDidMount() {
 		setInterval(() => {
 			this.getElev8Requests();
-		}, 5000);
+		}, 4000);
 	}
 
 	render() {
