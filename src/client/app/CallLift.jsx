@@ -10,7 +10,7 @@ const CallLift = ({httpRequest}) => {
 				document.getElementById('app').style.display = 'block';
 				document.body.classList.remove('calling-lift');
 				document.body.classList.add('app');
-			}, 50000);
+			}, 5000);
 			document.getElementById('app').style.display = 'none';
 			document.body.classList.remove('app');
 			document.body.classList.add('calling-lift');
