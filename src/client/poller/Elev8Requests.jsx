@@ -33,6 +33,12 @@ class Elev8Requests extends React.Component {
 		xhttp.send();
 	}
 
+	componentDidMount() {
+		setInterval(() => {
+			this.getElev8Requests();
+		}, 5000);
+	}
+
 	render() {
 		const requests = this.state.requests.map((request, i) => {
 			return <li key={i}>{request.message}</li>;

@@ -14,3 +14,32 @@ html {
   display: table;
   clear: both;
 }
+
+body.app { 
+  background: url(../images/concierge.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.container {}
+
+.user {position: fixed; top: 2px; left: 2px; font-size: 20px; color: #fff; text-shadow: 1px 1px #000; padding: 6px 12px; background: #000; border: 1px solid #222;}
+.signout-button {position: fixed; top: 2px; right: 2px;}
+
+.concierge {position: relative; width: 50%; min-width: 350px; margin: 120px auto 0; background-color: #fff; border: 2px solid #444; border-radius: 10px; padding: 18px; opacity: .95; box-shadow: 3px 3px 3px #000; text-align: center;}
+.concierge .message {}
+.concierge .message h2 {font-size: 28px; font-weight: bold;}
+.concierge .message p {font-size: 18px; font-weight: bold; color: #444; margin: 10px 0 20px;}
+.concierge input {display: inline-block; font-size: 20px; width: 200px; text-align: center;}
+button {display: inline-block; background-color: #096; border: 2px solid #063; border-radius: 4px; padding: 6px 12px; font-size: 16px; color: #fff; font-weight: bold; cursor: pointer; margin: 6px 10px;}
+button:hover {background-color: #fff; color: #096;}
+button:active {background-color: #efe; color: #096;}
+
+.call-lift button {background-color: #c33; border: 2px solid #900; color: #fee; font-size: 40px; padding: 20px; margin: 15px;}
+.call-lift button:hover {background-color: #a00;}
+.call-lift button:active {background-color: #800;}
+
+#lobbyboy {position: fixed; bottom: 0; right: 0; width: 100%; max-width: 480px;}
+#lobbyboy img {display: block; width: 100%;}
