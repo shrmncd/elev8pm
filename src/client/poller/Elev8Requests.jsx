@@ -18,19 +18,60 @@ class Elev8Requests extends React.Component {
 		this.setState({requests: requests});
 	}
 
+	httpRequest(method, url, data, callback) {
+		let xhttp = new XMLHttpRequest();
+		let params = "";
+		if (data) {
+			params = data;
+		}
+		method = method.toLowerCase();
+
+		xhttp.open(method, url, true);
+
+		if (method === "getting") {	
+			console.log("Posting...", url, data, callback);
+			xhttp.setRequestHeader("Content-type", "application/json");
+		}
+
+		if (method === "post") {	
+			console.log("Posting...", callback);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		}
+
+		xhttp.onreadystatechange = () => {
+		    if (xhttp.status == 200 && xhttp.readyState == 4) {
+		        //console.log(xhttp.responseText);
+		        //console.log("Response Text: ", xhttp.responseText);
+		        callback(null, JSON.parse(xhttp.responseText));
+		    }
+
+		    if (xhttp.status == 400 || xhttp.status == 500) {
+		    	callback(url + " could not be reached");
+		    }
+		}
+
+		xhttp.send(params);
+	}
+
 	getElev8Requests() {
-		console.log("Franz - time to get to work!");
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = ((xhttp, build) => {
-			return () => {
-			    if (xhttp.status == 200 && xhttp.readyState == 4) {
-			       var requests = JSON.parse(xhttp.responseText);
-			       build(requests);
-			    }
-			}			
-		})(xhttp, this.buildRequests);
-		xhttp.open("get", "http://localhost:3000/timely-requests", true);
-		xhttp.send();
+		this.httpRequest('get', '/timely-requests', null, (error, data) => {
+			this.buildRequests(data);
+			this.httpRequest('get', '/hey-franz/ring-the-bell', null, (error, data) => {
+				/*
+				setTimeout((data) => {
+					//turn off the bell after 30 seconds
+					document.getElementById('bell').innerHTML = '';
+					document.getElementById('silence-button').style.display = 'none';
+				}, 30000);
+				*/
+				if (data.bell === "ring") {
+					//Radiohead - BciOfJsqh7M
+					//TMNT - bojx9BDpJks
+					document.getElementById('bell').innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/BciOfJsqh7M?autoplay=1"></iframe>';
+					document.getElementById('silence-button').style.display = 'block';
+				}
+			});
+		});
 	}
 
 	componentDidMount() {

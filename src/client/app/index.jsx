@@ -39,7 +39,7 @@ class App extends React.Component {
 		xhttp.onreadystatechange = () => {
 		    if (xhttp.status == 200 && xhttp.readyState == 4) {
 		        console.log(xhttp.responseText);
-		        console.log("Response Text: ", xhttp.responseText);
+		        //console.log("Response Text: ", xhttp.responseText);
 		        callback(null, JSON.parse(xhttp.responseText));
 		    }
 
@@ -77,6 +77,7 @@ class App extends React.Component {
 
 		return (
 			<div className="location">
+				<h1>Elev8pm</h1>
 				{currentUser}
 				{logoutButton}
 				<Lobby nightowl={this.state.nightowl} httpRequest={this.httpRequest} updateUser={this.updateUser}/>

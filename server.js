@@ -76,6 +76,11 @@ var Elev8Request = sequelize.define('elev8requests', {
   message: {
     type: Sequelize.STRING,
     field: 'message'
+  },
+  fulfilled: {
+    type: Sequelize.INTEGER,
+    field: 'fulfilled',
+    defaultValue: false
   }
 }, {
   freezeTableName: true
@@ -109,21 +114,45 @@ app.get('/hey-franz/lift-please', function(req, res) {
 	});
 });
 
+app.get('/hey-franz/ring-the-bell', function(req, res) {
+  Elev8Request.update(
+    {fulfilled: true},
+    {where: {fulfilled: false }})
+    .then((requests) => {
+      if (requests) {
+        if (parseInt(requests, 10) === 0) {
+          console.log("Don't ring -------");
+          res.writeHeader(200, {"Content-Type": "application/json"});  
+          res.write('{\"bell\": \"dont-ring\"}');
+          return res.end();
+        } else {
+          console.log("Let's ring the bell!");
+          res.writeHeader(200, {"Content-Type": "application/json"});  
+          res.write('{\"bell\": \"ring\"}');
+          return res.end();
+        }
+    }
+  });  
+});
+
 app.get('/timely-requests', function(req, res) {
   Elev8Request.findAll({
-    createdAt: {
-      $lt: new Date(),
-      $gt: new Date(new Date() - 24 * 60 * 60 * 1000)//last 2 hours of requests
+    where: {
+      createdAt: {
+        $lt: new Date(),
+        $gt: new Date(new Date() - .02 * 60 * 60 * 1000),//last 2 hours of requests
+      },
+      fulfilled: false
     },
     limit: 3,
     order: 'createdAt DESC'
   }).then(function(elev8requests) {
 
-    console.log("Gathering requests...");
+    //console.log("Gathering requests...");
     const todaysRequests = [];
     Object.keys(elev8requests).forEach(function(req, i){
       const data = elev8requests[req].dataValues;
-      console.log(data);
+      //console.log(data);
       const request = {
         userId: data.id,
         message: data.message,
