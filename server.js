@@ -100,7 +100,7 @@ app.get('/hey-franz/lift-please', function(req, res) {
   Elev8Request.sync().then(function() {
 	  Elev8Request.create({
 	    userId: 1,
-	    message: 'Be a good chap, and let me up.',
+	    message: 'Be a good chap, and let me up.  - ' + Date(),
 	  }).then(function(elev8request){
 	  	res.writeHeader(200, {'Content-Type': 'application/json; charset=utf-8'});
 		res.write('{\"id\": \"' + elev8request.dataValues.id + '\"}');
