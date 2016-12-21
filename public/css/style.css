@@ -16,7 +16,7 @@ html {
 }
 
 body {
-	font-family: 'Sarala', cursive;
+	font-family: 'Sarala';
 }
 
 body.app { 
@@ -34,6 +34,8 @@ body.calling-lift {
 	-o-background-size: contain;
 	background-size: contain;
 }
+
+body.franz {}
 
 .container {}
 
@@ -54,6 +56,10 @@ button:active {background-color: #efe; color: #096;}
 .call-lift button {background-color: #c33; border: 2px solid #900; color: #fee; font-size: 40px; padding: 20px; margin: 15px;}
 .call-lift button:hover {background-color: #a00;}
 .call-lift button:active {background-color: #800;}
+
+button.geolocate {background-color: #00c; border: 2px solid #009; color: #fff;}
+button.geolocate:hover {background-color: #009; color: #fff;}
+button.geolocate:active {background-color: #00b;}
 
 #lobbyboy {position: fixed; bottom: 0; right: 0; width: 100%; max-width: 480px;}
 #lobbyboy img {display: block; width: 100%;}

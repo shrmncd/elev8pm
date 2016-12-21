@@ -16,7 +16,9 @@ class Elev8Requests extends React.Component {
 	}
 
 	buildRequests(requests) {
-		this.setState({requests: requests});
+		if (requests) {
+			this.setState({requests: requests});
+		}
 	}
 
 	httpRequest(method, url, data, callback) {
@@ -54,22 +56,48 @@ class Elev8Requests extends React.Component {
 		xhttp.send(params);
 	}
 
+	turnOffBell() {
+		console.log("Turning bell off");
+		this.httpRequest('get', '/hey-franz/turn-off-bell', null, (error, data) => {});
+		document.getElementById('bell').innerHTML = '';
+		document.getElementById('silence-button').style.display = 'none';
+	}
+
 	getElev8Requests() {
 		this.httpRequest('get', '/timely-requests', null, (error, data) => {
-			this.buildRequests(data);
+			console.log("Requests: ", data.length);
+			if (data.length) {
+				this.httpRequest('get', '/hey-franz/is-bell-ringing-perchance', null, (error, data) => {
+					console.log("Ringing? ", data);
+					if (!data.bellIsRinging) {
+						
+					} else {
+						if (!document.getElementById('bell').innerHTML) {
+							this.httpRequest('get', '/hey-franz/ring-the-bell', null, (error, data) => {
+								document.getElementById('bell').innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/KOnz2IKJxXk?autoplay=1"></iframe>';
+								document.getElementById('silence-button').style.display = 'block';
+								setTimeout(this.turnOffBell.bind(this), 60000);
+								console.log("Bell is still ringing from last request");
+							});
+						}
+							
+					}
+				});
+			}
+			/*
 			this.httpRequest('get', '/hey-franz/ring-the-bell', null, (error, data) => {
-				/*
 				setTimeout((data) => {
 					//turn off the bell after 30 seconds
 					document.getElementById('bell').innerHTML = '';
 					document.getElementById('silence-button').style.display = 'none';
+					console.log("After time out: ", data);
 				}, 30000);
-				*/
 				if (data.bell === "ring") {
 					document.getElementById('bell').innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/KOnz2IKJxXk?autoplay=1"></iframe>';
 					document.getElementById('silence-button').style.display = 'block';
 				}
 			});
+			*/
 		});
 	}
 

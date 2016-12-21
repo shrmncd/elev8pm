@@ -55,6 +55,16 @@ var sequelize = new Sequelize('mysql://lobbyboy:m3ndlZ_b4k3ry@localhost:3306/ele
 // 	});
 // });
 
+var Elevator = sequelize.define('elevator', {
+  bellIsRinging: {
+    type: Sequelize.BOOLEAN,
+    field: 'bell_is_ringing',
+    defaultValue: false
+  }
+}, {
+  freezeTableName: true
+});
+
 var Users = sequelize.define('users', {
   userId: {
     type: Sequelize.INTEGER,
@@ -99,6 +109,40 @@ var NightShifts = sequelize.define('nightshifts', {
   freezeTableName: true
 });
 
+app.all('/hey-franz/clean-up-good-fellow', (req, res) => {
+  Elevator.sync({force: true}).then(function() {
+    Elevator.create({
+      bellIsRinging: false,
+    }).then(function(elevator){});
+  });
+  res.writeHeader(200, {'Content-Type': 'application/json; charset=utf-8'});
+  res.write('{\"status\": \"all-clean\"}');
+  res.end();
+});
+
+app.get('/hey-franz/turn-off-bell', function(req, res) {
+  Elevator.update(
+    {bellIsRinging: false},
+    { where: {bellIsRinging: true} })
+    .then(function(elevator){
+      res.writeHeader(200, {'Content-Type': 'application/json; charset=utf-8'});
+      res.write('{\"bellIsRinging\": false}');
+      res.end();
+  });
+});
+
+app.get('/hey-franz/is-bell-ringing-perchance', function(req, res) {
+  Elevator.findOne({}).then(function(elevator) {
+    if (elevator) {
+      res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+      res.write('{\"bellIsRinging\": ' + elevator.dataValues.bellIsRinging + '}');
+      res.end();
+    } else {
+      console.log("No elevate :(");
+    }
+  });
+});
+
 app.get('/hey-franz/lift-please', function(req, res) {
   //USE { force: true } AFTER DROPING TABLES AND/OR CREATING
 	//Elev8Request.sync({force: true}).then(function() {
@@ -107,9 +151,10 @@ app.get('/hey-franz/lift-please', function(req, res) {
 	    userId: 1,
 	    message: 'Be a good chap, and let me up.  - ' + Date(),
 	  }).then(function(elev8request){
+      Elevator.update({bellIsRinging: true}, { where: {} });
 	  	res.writeHeader(200, {'Content-Type': 'application/json; charset=utf-8'});
-		res.write('{\"id\": \"' + elev8request.dataValues.id + '\"}');
-		res.end();
+		  res.write('{\"id\": \"' + elev8request.dataValues.id + '\"}');
+		  return res.end();
 	  });
 	});
 });
@@ -126,6 +171,9 @@ app.get('/hey-franz/ring-the-bell', function(req, res) {
           res.write('{\"bell\": \"dont-ring\"}');
           return res.end();
         } else {
+          Elevator.update(
+          {bellIsRinging: true},
+          { where: {} });
           console.log("Let's ring the bell!");
           res.writeHeader(200, {"Content-Type": "application/json"});  
           res.write('{\"bell\": \"ring\"}');
@@ -229,8 +277,12 @@ app.all("/nightshift/clock-out", (req, res) => {
   res.end('{\"nightowl\": \"undefined\"}');
 });
 
-app.get('/lobby', function(req, res) {
-  res.sendFile(path.join(__dirname, '/public/lobby.html'));
+app.get('/hey-franz', function(req, res) {
+  res.sendFile(path.join(__dirname, '/public/franz.html'));
+});
+
+app.get('/lobbyboy', function(req, res) {
+  res.sendFile(path.join(__dirname, '/public/lobbyboy.html'));
 });
 
 app.get('/', function(req, res) {
